@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Jellyfin.Plugin.Template</RootNamespace>
+    <RootNamespace>Jellyfin.Plugin.TelegramNotifications</RootNamespace>
+    <AssemblyName>Jellyfin.Plugin.TelegramNotifications</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
