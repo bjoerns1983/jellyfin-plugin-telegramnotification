@@ -30,7 +30,7 @@ namespace Jellyfin.Plugin.TelegramNotification.Api
         private TeleGramOptions GetOptions(String userID)
         {
             return Plugin.Instance.Configuration.Options
-                .FirstOrDefault(i => string.Equals(i.MediaBrowserUserId, userID, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(i => string.Equals(i.JellyfinUserId, userID, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Post(TestNotification request)

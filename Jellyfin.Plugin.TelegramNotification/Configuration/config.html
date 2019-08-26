@@ -20,10 +20,6 @@
                         <input is="emby-checkbox" type="checkbox" id="chkEnableTeleGram" />
                         <span>Enabled</span>
                     </label>
-					<label class="checkboxContainer">
-                        <input is="emby-checkbox" type="checkbox" id="chkSendDescriptionTeleGram" />
-                        <span>Send Descriptions (needed for Playback Reporting Plugin)</span>
-                    </label>
                     <div class="inputContainer">
                         <input is="emby-input" type="text" id="txtTeleGramBotKey" label="Telegram bot token:" required="required" />
                         <div class="fieldDescription">
@@ -31,7 +27,7 @@
                         </div>
                     </div>
                     <div class="inputContainer">
-                        <input is="emby-input" type="text" id="txtTeleGramChatID" label="Telegram ChatID key:" required="required" />
+                        <input is="emby-input" type="text" id="txtTeleGramChatID" label="Telegram ChatID:" required="required" />
                         <div class="fieldDescription">
                             Telegram chat ID, get it from @get_id_bot
                         </div>
@@ -64,13 +60,12 @@
 
                         var teleGramConfig = config.Options.filter(function (c) {
 
-                            return userId == c.MediaBrowserUserId;
+                            return userId == c.JellyfinUserId;
 
                         })[0] || {};
 
-						page.querySelector('#chkEnableTeleGram').checked = teleGramConfig.Enabled || false;
-                        page.querySelector('#chkSendDescriptionTeleGram').checked = teleGramConfig.SendDescription || false;
-						$('#txtTeleGramBotKey', page).val(teleGramConfig.BotToken || '');
+                        $('#chkEnableTeleGram', page).checked(teleGramConfig.Enabled || false).checkboxradio("refresh");
+                        $('#txtTeleGramBotKey', page).val(teleGramConfig.BotToken || '');
                         $('#txtTeleGramChatID', page).val(teleGramConfig.ChatID || '');
 
                         Dashboard.hideLoadingMsg();
@@ -110,7 +105,7 @@
 
                                 ApiClient.ajax({
                                     type: "POST",
-                                    url: ApiClient.getUrl("Notification/Telegram/Test/" + c.MediaBrowserUserId)
+                                    url: ApiClient.getUrl("Notification/Telegram/Test/" + c.JellyfinUserId)
 
                                 }).then(function () {
                                     Dashboard.hideLoadingMsg();
@@ -131,7 +126,7 @@
 
                             return '<option value="' + user.Id + '">' + user.Name + '</option>';
 
-                       })).trigger('change');
+                        })).selectmenu('refresh').trigger('change');
 
                     });
 
@@ -150,7 +145,7 @@
 
                         var teleGramConfig = config.Options.filter(function (c) {
 
-                            return userId == c.MediaBrowserUserId;
+                            return userId == c.JellyfinUserId;
 
                         })[0];
 
@@ -159,11 +154,10 @@
                             config.Options.push(teleGramConfig);
                         }
 
-                        teleGramConfig.MediaBrowserUserId = userId;
+                        teleGramConfig.JellyfinUserId = userId;
 
-                        teleGramConfig.Enabled = form.querySelector('#chkEnableTeleGram').checked;
-						teleGramConfig.SendDescription = form.querySelector('#chkSendDescriptionTeleGram').checked;
-						teleGramConfig.BotToken = $('#txtTeleGramBotKey', form).val();
+                        teleGramConfig.Enabled = $('#chkEnableTeleGram', form).checked();
+                        teleGramConfig.BotToken = $('#txtTeleGramBotKey', form).val();
                         teleGramConfig.ChatID = $('#txtTeleGramChatID', form).val();
 
                         ApiClient.updatePluginConfiguration(pluginId, config).then(Dashboard.processPluginConfigurationUpdateResult);
